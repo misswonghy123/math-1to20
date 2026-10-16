@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小學一年級數學：1-20 順數與倒數大冒險</title>
+  <style>
+    :root {
+      --primary-color: #FF6B6B;
+      --secondary-color: #4ECDC4;
+      --accent-color: #FFE66D;
+      --bg-color: #F7F9FC;
+      --card-bg: #FFFFFF;
+      --text-color: #2C3E50;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', 'PingFang TC', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: var(--primary-color);
+      text-shadow: 2px 2px 0px var(--accent-color);
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      font-size: 1.1rem;
+      color: #7F8C8D;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 700px;
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      border: 4px solid var(--accent-color);
+    }
+
+    .tab-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background-color: #E2E8F0;
+      color: #64748B;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background-color: var(--secondary-color);
+      color: white;
+      transform: scale(1.02);
+      box-shadow: 0 4px 10px rgba(78, 205, 196, 0.4);
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    /* 數字序列卡片風格 */
+    .number-display {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin: 20px 0;
+      min-height: 120px;
+    }
+
+    .num-card {
+      width: 45px;
+      height: 45px;
+      border-radius: 10px;
+      background-color: #FFE66D;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
+      box-shadow: 0 4px 0 #F1C40F;
+      animation: pop 0.3s ease;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0); }
+      80% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .action-btn {
+      padding: 10px 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background-color: var(--primary-color);
+      color: white;
+      box-shadow: 0 4px 0 #E74C3C;
+      transition: transform 0.1s;
+    }
+
+    .action-btn:active {
+      transform: translateY(4px);
+      box-shadow: none;
+    }
+
+    /* 互動練習樣式 */
+    .quiz-card {
+      background-color: #F8FAF0;
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 10px;
+      border: 2px dashed var(--secondary-color);
+    }
+
+    .quiz-title {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: var(--text-color);
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .opt-btn {
+      padding: 15px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border: 2px solid #CBD5E1;
+      border-radius: 12px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .opt-btn:hover {
+      border-color: var(--secondary-color);
+      background-color: #E6FFFA;
+    }
+
+    .feedback {
+      margin-top: 15px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+      min-height: 30px;
+    }
+
+    .correct { color: #2ECC71; }
+    .wrong { color: #E74C3C; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🚀 1-20 順數與倒數大冒險</h1>
+    <p class="subtitle">一起跟著小火箭學習數數吧！</p>
+  </header>
+
+  <div class="container">
+    <div class="tab-buttons">
+      <button class="tab-btn active" onclick="switchTab('learn')">📖 趣味學習</button>
+      <button class="tab-btn" onclick="switchTab('quiz')">🎮 闖關練習</button>
+    </div>
+
+    <!-- 學習模組 -->
+    <div id="learn-section" class="section active">
+      <h3>請選擇數數模式：</h3>
+      <div class="controls">
+        <button class="action-btn" onclick="startCount('forward')">順數 (1 ➔ 20)</button>
+        <button class="action-btn" style="background-color: #3498DB; box-shadow: 0 4px 0 #2980B9;" onclick="startCount('backward')">倒數 (20 ➔ 1)</button>
+      </div>
+
+      <div class="number-display" id="numberDisplay">
+        <!-- 動態生成數字卡片 -->
+      </div>
+    </div>
+
+    <!-- 練習模組 -->
+    <div id="quiz-section" class="section">
+      <div class="quiz-card">
+        <div class="quiz-title" id="quizQuestion">題目載入中...</div>
+        <div class="options-grid" id="optionsGrid">
+          <!-- 動態生成選項按鈕 -->
+        </div>
+        <div class="feedback" id="feedback"></div>
+      </div>
+      <div class="controls" style="margin-top: 20px;">
+        <button class="action-btn" style="background-color: #9B59B6; box-shadow: 0 4px 0 #8E44AD;" onclick="generateQuiz()">下一題 ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 切換頁籤
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      
+      if (tab === 'learn') {
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        document.getElementById('learn-section').classList.add('active');
+      } else {
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        document.getElementById('quiz-section').classList.add('active');
+        generateQuiz();
+      }
+    }
+
+    // 順數與倒數展示邏輯
+    let timer = null;
+    function startCount(type) {
+      const container = document.getElementById('numberDisplay');
+      container.innerHTML = '';
+      if (timer) clearInterval(timer);
+
+      let current = type === 'forward' ? 1 : 20;
+      const end = type === 'forward' ? 20 : 1;
+      const step = type === 'forward' ? 1 : -1;
+
+      timer = setInterval(() => {
+        const card = document.createElement('div');
+        card.className = 'num-card';
+        card.textContent = current;
+        container.appendChild(card);
+
+        if (current === end) {
+          clearInterval(timer);
+        } else {
+          current += step;
+        }
+      }, 250);
+    }
+
+    // 隨機題目生成器
+    let currentAnswer = 0;
+    function generateQuiz() {
+      const feedback = document.getElementById('feedback');
+      feedback.textContent = '';
+      const isForward = Math.random() > 0.5; // 隨機決定順數或倒數題目
+      
+      if (isForward) {
+        // 順數題 (1-18之間選起點)
+        const start = Math.floor(Math.random() * 17) + 1;
+        currentAnswer = start + 2;
+        document.getElementById('quizQuestion').innerHTML = 
+          `請順數填空： <b>${start}</b> , <b>${start + 1}</b> , <b style="color: #FF6B6B;">[ ? ]</b> , <b>${start + 3}</b>`;
+      } else {
+        // 倒數題 (4-20之間選起點)
+        const start = Math.floor(Math.random() * 17) + 4;
+        currentAnswer = start - 2;
+        document.getElementById('quizQuestion').innerHTML = 
+          `請倒數填空： <b>${start}</b> , <b>${start - 1}</b> , <b style="color: #FF6B6B;">[ ? ]</b> , <b>${start - 3}</b>`;
+      }
+
+      // 生成選項 (1個正確解答 + 3個錯誤答案)
+      let options = [currentAnswer];
+      while (options.length < 4) {
+        let wrongOpt = currentAnswer + (Math.floor(Math.random() * 5) - 2);
+        if (wrongOpt >= 1 && wrongOpt <= 20 && !options.includes(wrongOpt)) {
+          options.push(wrongOpt);
+        }
+      }
+      
+      // 打亂選項順序
+      options.sort(() => Math.random() - 0.5);
+
+      const grid = document.getElementById('optionsGrid');
+      grid.innerHTML = '';
+      options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn';
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(opt);
+        grid.appendChild(btn);
+      });
+    }
+
+    // 檢查答案
+    function checkAnswer(selected) {
+      const feedback = document.getElementById('feedback');
+      if (selected === currentAnswer) {
+        feedback.className = 'feedback correct';
+        feedback.textContent = '🎉 答對了！太棒了！';
+      } else {
+        feedback.className = 'feedback wrong';
+        feedback.textContent = '❌ 再試試看喔！加油！';
+      }
+    }
+
+    // 預設載入一次順數動畫
+    startCount('forward');
+  </script>
+</body>
+</html>
